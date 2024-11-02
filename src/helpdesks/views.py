@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.views import View
+from .models import Helpdesk
 
-# Create your views here.
+class HelpdeskByPriorityView(View):
+    def get(self, request, *args, **kwargs):
+        priority = request.GET.get("priority")
+        helpdesks = Helpdesk.objects.filter(service_priority=priority).values("id", "name")
+        return JsonResponse(list(helpdesks), safe=False)
