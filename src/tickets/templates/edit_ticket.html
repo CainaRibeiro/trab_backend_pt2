@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Chamado</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Editar Chamado: {{ ticket.ticket }}</h2>
+        <form action="{% url 'edit_ticket' ticket.id %}" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="ticket">Título do Chamado</label>
+                <input type="text" class="form-control" id="ticket" name="ticket" value="{{ ticket.ticket }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Descrição</label>
+                <textarea class="form-control" id="description" name="description" rows="4"
+                    readonly>{{ ticket.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="priority">Prioridade</label>
+                <input type="text" class="form-control" id="priority" name="priority" value="{{ ticket.priority }}"
+                    readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="helpdesk">Helpdesk</label>
+                <input type="text" class="form-control" id="helpdesk" name="helpdesk"
+                    value="{{ ticket.helpdesk_id.name }}" readonly>
+            </div>
+
+            <div class="form-group">
+                <label for="resolution">Resolução</label>
+                <textarea class="form-control" id="resolution" name="resolution"
+                    rows="4">{{ form.resolution.value }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <a href="{% url 'list_tickets' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+</body>
+
+</html>

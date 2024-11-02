@@ -6,4 +6,10 @@ from tickets.models import Ticket
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['ticket', 'description', 'priority', 'helpdesk_id', 'user_id']
+        fields = ['ticket', 'description', 'priority', 'helpdesk_id', 'user_id', 'resolution']
+        
+
+class TicketEditForm(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['resolution'] 
