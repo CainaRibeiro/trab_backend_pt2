@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Chamado</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h2>Criar Chamado</h2>
+        <form action="{% url 'create_ticket' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="ticket">Título do Chamado</label>
+                <input type="text" class="form-control" id="ticket" name="ticket" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Descrição</label>
+                <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="priority">Prioridade</label>
+                <select class="form-control" id="priority" name="priority" required>
+                    <option value="">Selecione...</option>
+                    <option value="1">Baixa</option>
+                    <option value="2">Média</option>
+                    <option value="3">Alta</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="helpdesk">Helpdesk:</label>
+                <select id="helpdesk" name="helpdesk_id" class="form-control">
+                    <option value="">Selecionar Helpdesk</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="user">Usuário que reportou:</label>
+                <select id="user" name="user_id" class="form-control">
+                    <option value="">Selecione o usuário</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Criar Chamado</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>
+
+<script>
+    function fetchUsers() {
+        const userSelect = document.getElementById('user');
+        fetch(`/user/get-all`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.text = user.name;
+                    userSelect.add(option);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    document.getElementById('priority').addEventListener('change', function () {
+        const priority = this.value;
+        const helpdeskSelect = document.getElementById('helpdesk');
+
+        helpdeskSelect.innerHTML = '<option value="">Select Helpdesk</option>';
+
+        if (priority) {
+            fetch(`/helpdesk/get-by-priority?priority=${priority}`)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(helpdesk => {
+                        const option = document.createElement('option');
+                        option.value = helpdesk.id;
+                        option.text = helpdesk.name;
+                        helpdeskSelect.add(option);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', fetchUsers);
+</script>
