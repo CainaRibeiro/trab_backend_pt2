@@ -31,6 +31,8 @@ class TicketView(CreateView):
 
                 ticket.save()
                 return redirect('dashboard')
+            else:
+                return render(request, 'create.html', {'form': form})
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
